@@ -6,7 +6,7 @@ on:
     types: [ opened, reopened ]
 
 jobs:
-  changelog build:
+  changelog_build:
     runs-on: ubuntu-latest
 
     steps:

@@ -1,0 +1,60 @@
+                                ###############
+                                ### PROJECT ###
+                                ###############
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+version = "0.0.0"  # a placeholder for poetry CI dynamic versionning plugin
+name = "test"
+readme = "README.md"
+description = "desc"
+authors = ["auth"]
+
+        #########
+        # TESTS #
+        #########
+
+[tool.pytest.ini_options]  # pytest
+# https://docs.pytest.org
+# https://pypi.org/project/pytest-asyncio/
+# https://pytest-cov.readthedocs.io/en/latest/
+# https://pypi.org/project/pytest-pythonpath/
+# https://pypi.org/project/pytest-sugar/
+minversion = 7.0
+asyncio_mode = "auto"
+addopts = ["--ignore=tmp.py"]
+norecursedirs = "data"
+testpaths = "./tests"
+
+#log_cli = true
+#log_cli_level = "DEBUG"
+
+pythonpath = ["./src", "./.venv", "./venv"]
+filterwarnings = ["ignore::UserWarning", 'ignore::DeprecationWarning', "ignore::ResourceWarning"]
+
+[tool.coverage.run]  # coverage
+branch = true
+omit = [
+    "tests/*",
+]
+
+[tool.coverage.html]
+directory = "tests/code_coverage"
+
+[tool.coverage.report]
+#fail_under=96
+exclude_lines = [
+    "no cov",
+    "pragma: no cover",
+    "if typing.TYPE_CHECKING:",
+    "if TYPE_CHECKING:",
+    "if __name__ == .__main__.:",
+    "pass",
+    "raise NotImplementedError",
+    "except ImportError",
+    "except ModuleNotFoundError",
+    "except Exception"
+]

@@ -20,5 +20,5 @@ jobs:
         uses: saadmk11/changelog-ci@v1.1.2
         with:
           changelog_filename: CHANGELOG.rst
-          config_file: .github/configs/changelog-ci-config.json
+          config_file: .github/workflows/configs/changelog-ci-config.json
           github_token: ${{ secrets.GITHUB_TOKEN }}

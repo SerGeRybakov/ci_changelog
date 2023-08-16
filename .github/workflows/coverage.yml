@@ -59,14 +59,6 @@ jobs:
             coverage run -m pytest
             coverage report --fail-under=10
             coverage xml
-            genbadge coverage -v -i ./coverage.xml -o ./docs/coverage-badge.svg
-            git config --global user.name 'coverage-badge'
-            git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
-            git checkout $GITHUB_HEAD_REF
-            git add docs/coverage-badge.svg
-            git commit -m "fixup: Coverage badge updated"
-            git push
-
         env:
           PIP_DISABLE_PIP_VERSION_CHECK: 1
 
@@ -76,3 +68,14 @@ jobs:
         with:
           name: coverage-reports
           path: coverage.xml
+
+      - name: Creage coverage badge
+        run: |
+#          source .venv/bin/activate
+          genbadge coverage -v -i ./coverage.xml -o ./docs/coverage-badge.svg
+          git config --global user.name 'coverage-badge'
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
+          git checkout $GITHUB_HEAD_REF
+          git add docs/coverage-badge.svg
+          git commit -m "fixup: Coverage badge updated"
+          git push

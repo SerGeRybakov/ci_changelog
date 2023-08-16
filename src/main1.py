@@ -1,2 +1,2 @@
-if __name__ == '__main__':
-    print("hello world")
+def main(x, y):
+    return x + y

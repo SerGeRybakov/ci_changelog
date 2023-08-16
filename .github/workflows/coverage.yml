@@ -23,8 +23,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          source .venv/bin/activate
-          pip install -r requirements.txt
+          poetry run pip install -r requirements.txt
 
       - name: Cache virtual environment
         uses: actions/cache@v2

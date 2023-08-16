@@ -3,18 +3,77 @@ on:
   push:
 
 jobs:
-  build:
+  setup:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: action-badges/create-orphan-branch@0.1.0
-        with:
-          branch-name: main
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Make Coverage Badge
-        uses: action-badges/cobertura-coverage-xml-badges@0.2.1
+      - name: Set up Python
+        uses: actions/setup-python@v3
         with:
-          file-name: coverage.svg
-          badge-branch: main
-          github-token: '${{ secrets.GITHUB_TOKEN }}'
-          coverage-file-name: ./coverage.xml
+          python-version: "3.9"
+
+      - name: Install poetry
+        uses: snok/install-poetry@v1.3.4
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Install dependencies
+        run: |
+          source .venv/bin/activate
+          pip install -r requirements.txt
+
+      - name: Cache virtual environment
+        uses: actions/cache@v2
+        with:
+          path: .venv
+          key: ${{ runner.os }}-venv-3.9-${{ hashFiles('pyproject.toml', 'poetry.lock') }}
+
+ coverage:
+  needs: setup
+  runs-on: ubuntu-latest
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - name: Load virtual environment
+      uses: actions/cache@v2
+      with:
+        path: .venv
+        key: ${{ runner.os }}-venv-${{ inputs.python-version }}-${{ hashFiles('pyproject.toml', 'poetry.lock') }}
+
+    - name: Run coverage
+      uses: nick-fields/retry@v2
+      with:
+        timeout_minutes: 60
+        max_attempts: 3
+        command: |
+          source .venv/bin/activate
+          coverage run -m pytest
+          coverage report --fail-under=10
+          coverage xml
+          genbadge coverage -v -i ./coverage.xml -o ./docs/coverage-badge.svg
+          git config --global user.name 'coverage-badge'
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
+          git checkout $GITHUB_HEAD_REF
+          git add docs/coverage-badge.svg
+          git commit -m "fixup: Coverage badge updated"
+          git push
+
+      env:
+        PIP_DISABLE_PIP_VERSION_CHECK: 1
+
+    - name: Save coverage reports
+      if: always()
+      uses: actions/upload-artifact@v2
+      with:
+        name: coverage-reports
+        path: coverage.xml

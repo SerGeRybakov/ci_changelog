@@ -3,7 +3,7 @@ name: Changelog CI
 on:
   pull_request:
     branchss: main
-    types: [ opened ]
+    types: [ opened, reopened ]
 
 jobs:
   build:

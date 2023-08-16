@@ -10,4 +10,7 @@ Version: v1.1.0
 * `b22755f <https://github.com/SerGeRybakov/ci_changelog/commit/b22755f9151b5f6549b30df1aeae673872cfed28>`__: something new added
 * `7b71f60 <https://github.com/SerGeRybakov/ci_changelog/commit/7b71f60573cced4ca3e9625798536eb6c2b6d220>`__: something new added
 * `1be35d5 <https://github.com/SerGeRybakov/ci_changelog/commit/1be35d50cbc2f52cc38bf582db36b75a9f05bebb>`__: something new added
+
+Release: v1.0.1
+===============
 * `2202c55 <https://github.com/SerGeRybakov/ci_changelog/commit/2202c555c8d645990e4d9c239a73c816cd754c54>`__: ci
